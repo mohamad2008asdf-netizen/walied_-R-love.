@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝑹 قلبي لك</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0008;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* خلفية ثابتة */
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .bg-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 20, 60, 0.15) 0%, transparent 70%);
+        }
+
+        .bg-glow::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            left: 30%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 105, 180, 0.08) 0%, transparent 70%);
+        }
+
+        /* النجوم الثابتة */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        /* الحاوية الرئيسية */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* القلب الرئيسي - ثابت بدون نبض */
+        .heart-wrapper {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* القلب الكبير */
+        .big-heart {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: linear-gradient(135deg, #ff1744, #d50000, #c62828);
+            transform: rotate(-45deg);
+            border-radius: 0 0 80px 0;
+            filter: drop-shadow(0 0 30px rgba(220, 20, 60, 0.6))
+                    drop-shadow(0 0 60px rgba(220, 20, 60, 0.3));
+        }
+
+        /* فصي القلب الأعلى */
+        .big-heart::before,
+        .big-heart::after {
+            content: '';
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: linear-gradient(135deg, #ff1744, #d50000, #c62828);
+            border-radius: 50%;
+        }
+
+        .big-heart::before {
+            top: -130px;
+            left: 0;
+        }
+
+        .big-heart::after {
+            top: 0;
+            left: 130px;
+        }
+
+        /* لمعان القلب - ثابت */
+        .heart-shine {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            transform: rotate(-45deg);
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .heart-shine::before,
+        .heart-shine::after {
+            content: '';
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            background: transparent;
+        }
+
+        .heart-shine::before {
+            top: -130px;
+            left: 0;
+        }
+
+        .heart-shine::after {
+            top: 0;
+            left: 130px;
+        }
+
+        .heart-shine-inner {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 100px;
+            height: 200px;
+            background: linear-gradient(160deg, rgba(255,255,255,0.35), transparent 60%);
+            transform: rotate(30deg);
+        }
+
+        /* حرف R داخل القلب */
+        .letter-s {
+            position: relative;
+            z-index: 15;
+            font-size: 110px;
+            font-weight: 900;
+            font-style: italic;
+            color: #fff;
+            text-shadow:
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 105, 180, 0.6),
+                0 0 80px rgba(255, 23, 68, 0.4);
+            user-select: none;
+            line-height: 1;
+        }
+
+        /* النص الرومانسي - ثابت بدون تغيير */
+        .romantic-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 2;
+            max-width: 400px;
+        }
+
+        .romantic-text .highlight {
+            color: #ff4081;
+            font-weight: 700;
+            font-size: 20px;
+            text-shadow: 0 0 15px rgba(255, 64, 129, 0.5);
+        }
+
+        /* خط فاصل مزخرف */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 64, 129, 0.4);
+            font-size: 12px;
+        }
+
+        .divider-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to left, transparent, rgba(255, 64, 129, 0.5));
+        }
+
+        .divider-line:last-child {
+            background: linear-gradient(to right, transparent, rgba(255, 64, 129, 0.5));
+        }
+
+        /* خط دائري حول القلب - ثابت */
+        .orbit-line {
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            border: 1px dashed rgba(255, 64, 129, 0.15);
+            border-radius: 50%;
+        }
+
+        .orbit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #ff4081;
+            border-radius: 50%;
+            top: -3px;
+            left: 50%;
+            box-shadow: 0 0 10px #ff4081;
+        }
+
+        /* استجابة الشاشات الصغيرة */
+        @media (max-width: 480px) {
+            .heart-wrapper {
+                width: 220px;
+                height: 220px;
+            }
+            .big-heart, .big-heart::before, .big-heart::after {
+                width: 200px;
+                height: 200px;
+            }
+            .big-heart::before { top: -100px; }
+            .big-heart::after { left: 100px; }
+            .heart-shine, .heart-shine::before, .heart-shine::after {
+                width: 200px;
+                height: 200px;
+            }
+            .heart-shine::before { top: -100px; }
+            .heart-shine::after { left: 100px; }
+            .letter-s { font-size: 80px; }
+            .romantic-text { font-size: 15px; padding: 0 20px; }
+            .orbit-line { width: 260px; height: 260px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- خلفية التوهج -->
+    <div class="bg-glow"></div>
+
+    <!-- النجوم الثابتة -->
+    <div class="stars" id="stars"></div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container">
+
+        <!-- خط مداري ثابت -->
+        <div class="orbit-line">
+            <div class="orbit-dot"></div>
+        </div>
+
+        <!-- القلب الثابت -->
+        <div class="heart-wrapper">
+            <!-- القلب الكبير -->
+            <div class="big-heart"></div>
+            <div class="heart-shine">
+                <div class="heart-shine-inner"></div>
+            </div>
+
+            <!-- الحرف R داخل القلب -->
+            <span class="letter-s">𝑹</span>
+        </div>
+
+        <!-- فاصل مزخرف -->
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span>♥ ♥ ♥</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- النص الثابت -->
+        <p class="romantic-text">
+يا مَن تفرّدَ بالحُسنِ الذي خُلِقا <br>
+وسابَقَ البدرَ حتى جاوزَ الأفقا <br>
+<span class="highlight">أعشقكِ</span> عشقًا لو انسابَتْ حرارتُهُ <br>
+لأيقظتْ في دجى الأيامِ ما خُنِقا <br>
+ما كنتِ طيفًا على دربِ الهوى عَبَرَتْ <br>
+بل كنتِ في الروحِ تاريخًا ومُعتنَقا <br>
+إذا ابتسمتِ تناثرتِ السما فرحًا <br>
+وغارَ من نورِ عينيكِ المدى شفقا <br>
+أقسمتُ أني إذا ما ضاعَ مركبُنا <br>
+أكونُ بحرًا على أمواجِكِ انطلقا <br>
+فأنتِ قدري الذي في القلبِ أكتبهُ <br>
+وأنتِ عشقي الذي ما خانَ أو صدقا <br>
+إن غبتِ لحظةَ عمرٍ ضاقَ بي وطني <br>
+وإن حضرتِ رأيتُ الكونَ قد خُلقا
+ بًحًبًکْ بًنِتٌيِّ 𝑰 𝑳𝒐𝒗𝒆 ❤🥺
+</p>
+    </div>
+
+    <script>
+        // === إنشاء النجوم الثابتة (بدون حركة) ===
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (1 + Math.random() * 3) + 'px';
+            star.style.height = star.style.width;
+            star.style.opacity = 0.3 + Math.random() * 0.5;
+            starsContainer.appendChild(star);
+        }
+    </script>
+</body>
+</html>
